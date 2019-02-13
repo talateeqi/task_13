@@ -23,6 +23,8 @@
             <h5 class="card-title">{{restaurant.name}}</h5>
             <p class="card-text">{{restaurant.description|truncatechars:25}}</p>
           </div>
+        <button class = "btn btn-light col-2" onclick="like('{% url "restaurant-favorite" restaurant.id %}')">Like<span id="restaurant_favorite-count"></span>
+        </button>
           <ul class="list-group list-group-flush">
             <li class="list-group-item text-center">
                 <a href="{% url 'restaurant-detail' restaurant.id %}" class="btn btn-outline-dark">View</a>
@@ -32,5 +34,31 @@
     </div>
     {% endfor %}
 </div>
+<script type="text/javascript">
+function like(url) {
+  $.ajax(
+        {
+            type:'GET',
+            url: url,
+            error: function(){
+                alert('error');
+            },
+            success: function(data){ 
+                alert("success")
+                let restaurant_id = "favorite-"+id;
+                if(data.action=="like")
+                {
+                  $("restaurant_favorite-count").text(data.restaurant);
+                 }else{
+                  $(restaurant_id).like()
+                 }
+                $("#student-count").text(data.students);
+            },
+        }
+    );
+
+        }
+    
+</script>
 {% endblock content %}
 
